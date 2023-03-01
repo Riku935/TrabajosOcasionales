@@ -12,12 +12,14 @@ public UnityEvent evento;
 
 [SerializeField]
 int numResultados = 2;
-async void Start(){
-    //await GetRequest();
-    // Debug.Log("De regreso al metodo start");
-    // Debug.Log("Resultado: "+ resutado);
-}
-
+    async void Start()
+    {
+        //await GetRequest();
+        // Debug.Log("De regreso al metodo start");
+        // Debug.Log("Resultado: "+ resutado);
+        await GetRequest();
+    }
+    
     async public void Request()
     {
         await GetRequest();
@@ -34,8 +36,10 @@ async void Start(){
         await Task.Yield();
 
     if(www.result== UnityWebRequest.Result.Success){
-        //contenedorPersonas.personas = new Persona; ESTO ES LO QUE HAY QUE CAMBIAR
-        Debug.Log($"Success: {www.downloadHandler.text}");
+        //contenedorPersonas.personas = new Persona; //ESTO ES LO QUE HAY QUE CAMBIAR
+        contenedorPersonas.personas.Clear();
+
+            Debug.Log($"Success: {www.downloadHandler.text}");
         resutado =www.downloadHandler.text; 
         try{
             JSONNode root = JSONNode.Parse(resutado);

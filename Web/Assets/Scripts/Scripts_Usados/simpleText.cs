@@ -6,8 +6,8 @@ public class simpleText : MonoBehaviour
 {
     public ContenedorPersonas contenedorPersonas;
 
-    TMP_Text jokeText;
-    TMP_Text answerText;
+    public TMP_Text jokeText;
+    public TMP_Text answerText;
     public bool oneortwo = true;
     void Awake()
     {
