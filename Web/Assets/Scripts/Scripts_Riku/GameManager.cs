@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public bool Reaload = false;
     public bool next = false;
 
+    public int goodJokes;
+
     public static GameManager obj;
     private void Awake()
     {

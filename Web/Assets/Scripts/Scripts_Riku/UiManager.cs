@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class UiManager : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class UiManager : MonoBehaviour
     public GameObject gamePanel;
     public GameObject jokePanel;
     public GameObject answerPanel;
+    public GameObject LikePanel;
+    public GameObject informationPanel;
+    public TMP_Text goodJokes;
+    public int goodJokesCount;
     private void Awake()
     {
         obj = this;
@@ -20,7 +25,11 @@ public class UiManager : MonoBehaviour
 
     void Update()
     {
-        
+        UpdateJokes();
+    }
+    private void UpdateJokes()
+    {
+        goodJokes.text = "" + goodJokesCount;
     }
     public void StartGame()
     {
@@ -34,7 +43,8 @@ public class UiManager : MonoBehaviour
         GameManager.obj.Dislike = false;
         GameManager.obj.next = false;
         GameManager.obj.Reaload = false;
-
+        LikePanel.SetActive(false);
+        goodJokesCount++;
     }
     public void DisLikeButton()
     {
@@ -42,6 +52,7 @@ public class UiManager : MonoBehaviour
         GameManager.obj.like = false;
         GameManager.obj.next = false;
         GameManager.obj.Reaload = false;
+        LikePanel.SetActive(false);
     }
     public void NewJoke()
     {
@@ -57,9 +68,21 @@ public class UiManager : MonoBehaviour
     {
         jokePanel.SetActive(false);
         answerPanel.SetActive(true);
+        LikePanel.SetActive(true);
+
         GameManager.obj.jokeAnswer = false;
         GameManager.obj.next = true;
         GameManager.obj.Reaload = false;
+    }
+    public void InformationPanel()
+    {
+        informationPanel.SetActive(true);
+        gamePanel.SetActive(false);
+    }
+    public void closeInfo()
+    {
+        informationPanel.SetActive(false);
+        gamePanel.SetActive(true);
     }
     private void OnDestroy()
     {
