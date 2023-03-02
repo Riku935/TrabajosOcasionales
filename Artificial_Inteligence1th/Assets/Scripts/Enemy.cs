@@ -11,8 +11,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform target;
     [SerializeField] private float speed;
     [SerializeField] private float maxSpeed;
-
     [SerializeField] private float slowingRadius;
+
+    public GameObject randomTransform; //Lo puse yo
+    private bool crRunning; //Lo puse yo
 
     private Queue<Vector3> targetQueue = new Queue<Vector3>();
 
@@ -43,7 +45,6 @@ public class Enemy : MonoBehaviour
         {
             action(); //Ejecutas la accion
         }
-
     }
     private void CalculateSeek()
     {
@@ -84,7 +85,23 @@ public class Enemy : MonoBehaviour
     }
     private void CalculateWander()
     {
-        
+        Vector3 newTarget = targetWander;
+        Vector3 steering = Seek(newTarget);
+        Move(steering);
+        if (crRunning == false) 
+        {
+            StartCoroutine(ChangeTarget());
+            crRunning = true;
+        }
+    }
+    void prueba()
+    {
+        //float circleCenter = 2f;
+
+        //Vector3 circleDist = velocity.normalized * circleCenter;
+        float circledist = 2;
+        Vector3 circleCenter;
+        circleCenter = velocity.normalized * circledist;
     }
     private void FillQueue()
     {
@@ -102,6 +119,7 @@ public class Enemy : MonoBehaviour
             yield return new WaitForSeconds(5);
             if (targetQueue.Count == 0) FillQueue();
             targetWander = targetQueue.Dequeue();
+            randomTransform.transform.position = targetWander; //Yo puse esto
         }
     }
 }
