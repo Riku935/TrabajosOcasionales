@@ -9,6 +9,15 @@ public class Wander : MonoBehaviour
     private Queue<Vector3> targetQueue = new Queue<Vector3>();
     private bool crRunning = false;
 
+
+    [Header("Wander Attributes")]
+    Vector3 velocity;
+    Vector3 wanderForce;
+    float randomAngle;
+
+    public float circleRadius = 1;
+    
+
     private void Start()
     {
         targetWander = transform.position;
@@ -16,6 +25,7 @@ public class Wander : MonoBehaviour
     private void Update()
     {
         CalculateWander();
+        Debug.DrawLine(transform.position, velocity.normalized * 2, Color.green);
     }
 
 
@@ -26,6 +36,7 @@ public class Wander : MonoBehaviour
         if (crRunning == false)
         {
             StartCoroutine(ChangeTarget());
+            StartCoroutine(RandomAngle());
  
             crRunning = true;
         }
@@ -36,6 +47,23 @@ public class Wander : MonoBehaviour
         {
             Vector3 randomTarget = new Vector3(UnityEngine.Random.Range(-8f, 8f), UnityEngine.Random.Range(-5f, 5f), 0);
             targetQueue.Enqueue(randomTarget);
+        }
+    }
+
+
+    private void GetAngle()
+    {
+        Quaternion rotate = Quaternion.AngleAxis (randomAngle, Vector3.forward);
+        var displacement = new Vector3(0, -1); 
+        displacement = rotate * displacement;
+    }
+
+    IEnumerator RandomAngle()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(2);
+            randomAngle = Random.value;
         }
     }
 

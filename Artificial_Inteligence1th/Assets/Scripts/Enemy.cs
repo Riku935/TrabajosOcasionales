@@ -20,13 +20,20 @@ public class Enemy : MonoBehaviour
 
     private enum SteeringType
     {
-        Seek, RunAway, Arrival, Wander
+        Seek, RunAway, Arrival, Wander, Pursuit
     }
     [SerializeField] private SteeringType _type = SteeringType.RunAway; //SteeringType.RunAway esto lo que hace es poner RunAway como la opcion por defecto
     private Dictionary<string, Action> _actions = new Dictionary<string, Action>();  //Acciones son delegados que no toman ningun parametro y no regresan ningun valor
 
     private Vector3 steering;
+
     private Vector3 targetWander;
+    public float CircleDistance = 1f;
+    private Vector3 WanderForce;
+    public float T = 1;
+    public MouseMovement player;
+
+    public GameObject targetObject;
     
     void Start()
     {
@@ -35,6 +42,7 @@ public class Enemy : MonoBehaviour
         _actions.Add("RunAway", CalculateRun);
         _actions.Add("Arrival", CalculateArrival);
         _actions.Add("Wander", CalculateWander);
+        _actions.Add("Pursuit", CalculatePursuit);
         FillQueue();
         StartCoroutine(ChangeTarget());
     }
@@ -46,16 +54,19 @@ public class Enemy : MonoBehaviour
             action(); //Ejecutas la accion
         }
     }
+
     private void CalculateSeek()
     {
         Vector3 steering = Seek(target.position);
         Move(steering);
     }
+
     Vector3 Seek(Vector3 target)
     {
         Vector3 desiredVelocity = ((target - transform.position).normalized * speed);
         return desiredVelocity - velocity;
     }
+
     void Move(Vector3 steering)
     {
         velocity += steering;
@@ -63,11 +74,13 @@ public class Enemy : MonoBehaviour
         
         transform.position += velocity * Time.deltaTime;
     }
+
     private void CalculateRun()
     {
         Vector3 steering = Seek(target.position);
         Move(steering * -1);
     }
+
     private void CalculateArrival()
     {
         Vector3 desiredVelocity = ((target.position - transform.position).normalized);
@@ -83,16 +96,40 @@ public class Enemy : MonoBehaviour
         }
         Move(steering);
     }
+
+
+
     private void CalculateWander()
     {
+        Vector3 circleCenter = velocity.normalized * CircleDistance;
+        Debug.DrawLine(transform.position, transform.position + circleCenter, Color.green);
+
+        var displacement = new Vector3(0, -1);
+        //Debug.DrawLine(circleposition , circleposition  + displacement, Color.blue);
+
         Vector3 newTarget = targetWander;
         Vector3 steering = Seek(newTarget);
         Move(steering);
+
+
+
         if (crRunning == false) 
         {
             StartCoroutine(ChangeTarget());
             crRunning = true;
         }
+    }
+
+    void CalculatePursuit()
+    {
+        Vector3 distance = target.position - transform.position;
+
+        //Vector3 targetVelocity = targetObject.GetComponent<Rigidbody2D>().velocity;
+        Vector3 targetVelocity = player.m_prevPosition;
+        Vector3 futurePos = target.position + targetVelocity * T;
+        Vector3 steering = Seek(futurePos);
+        Move(steering);
+
     }
     void prueba()
     {
@@ -103,6 +140,11 @@ public class Enemy : MonoBehaviour
         Vector3 circleCenter;
         circleCenter = velocity.normalized * circledist;
     }
+
+
+
+
+
     private void FillQueue()
     {
         for (int i = 0; i < 10; i++)
