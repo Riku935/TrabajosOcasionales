@@ -6,24 +6,25 @@ using UnityEngine;
 public class Examen : MonoBehaviour
 {
     [Header("Wander")]
-    [SerializeField] private float circleDistance;
-    [SerializeField] private float circleRadius;
-    [SerializeField] private float angleChange;
+    [SerializeField] private float circleDistance = 3;
+    [SerializeField] private float circleRadius = 2;
+    [SerializeField] private float angleChange = 0;
     [SerializeField] private Vector3 targetChange;
-    [SerializeField] private GameObject targetObjectRandom;
+    //[SerializeField] private GameObject targetObjectRandom;
     private Vector3 targetWander;
     private float angleWander;
     private bool coroutineRunning;
     private Queue<Vector3> targetQueue = new Queue<Vector3>();
 
     [Header("Seek")]
-    [SerializeField] private float speed;
-    [SerializeField] private float maxSpeed;
-    [SerializeField] private Transform target;
+    [SerializeField] private float speed = 3;
+    [SerializeField] private float maxSpeed = 10;
+    //[SerializeField] private Transform target;
+    public Vector3 seekTarget;
 
     [Header("Run Away")]
-    [SerializeField] private float speedAway;
-    [SerializeField] private float maxSpeedAway;
+    [SerializeField] private float speedAway = 3;
+    [SerializeField] private float maxSpeedAway = 10;
 
     private Vector3 steering;
     private Vector3 velocity;
@@ -41,11 +42,14 @@ public class Examen : MonoBehaviour
     private void Start()
     {
         targetWander = transform.position;
+        targetChange = transform.position;
         _actions.Add("Seek", CalculateSeek);
         _actions.Add("RunAway", CalculateRunAway);
         _actions.Add("Wander", CalculateWander);
         StartCoroutine(ChangeTarget());
         StartCoroutine(ChangeAngle());
+        FillQueue();
+
     }
     void Update()
     {
@@ -57,13 +61,13 @@ public class Examen : MonoBehaviour
 
     private void CalculateSeek()
     {
-        Vector3 steering = Seek(target.position);
+        Vector3 steering = Seek(seekTarget);
         Move(steering);
     }
     #region Seek
     Vector3 Seek (Vector3 target)
     {
-        Vector3 desiredVelocity = ((target - transform.position).normalized * speed);
+        Vector3 desiredVelocity = ((seekTarget - transform.position).normalized * speed);
         return desiredVelocity - velocity;
     }
     private void Move(Vector3 steering)
@@ -75,13 +79,30 @@ public class Examen : MonoBehaviour
     #endregion 
     private void CalculateRunAway()
     {
-        Vector3 steering = Seek(target.position);
-        Move(steering * -1);
+        Vector3 steering = SeekRun(seekTarget);
+        MoveRun(steering * -1);
     }
+
+    #region Run
+    Vector3 SeekRun(Vector3 target)
+    {
+        Vector3 desiredVelocity = ((seekTarget - transform.position).normalized * speedAway);
+        return desiredVelocity - velocity;
+    }
+    private void MoveRun(Vector3 steering)
+    {
+        velocity += steering;
+        velocity = Vector3.ClampMagnitude(velocity, maxSpeedAway);
+        transform.position += velocity * Time.deltaTime;
+    }
+    #endregion 
+
     private void CalculateWander()
     {
-        Vector3 newTarget = targetWander;
-        Vector3 steering = Seek(wonderForce() + Seek(targetWander));
+        //Vector3 newTarget = targetWander;
+        seekTarget = targetChange;
+        targetWander = targetChange;
+        Vector3 steering = Seek(wonderForce() + Seek(seekTarget));
         Move(steering);
         Vector3 circleCenter = velocity.normalized * circleDistance;
         Vector3 circlePosition = transform.position + circleCenter;
@@ -113,11 +134,12 @@ public class Examen : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.5f);
             angleWander = UnityEngine.Random.Range(-90, 90);
+            yield return new WaitForSeconds(0.5f);
         }
     }
     #endregion
+
     #region RandomTarget
     private void FillQueue()
     {
@@ -131,11 +153,13 @@ public class Examen : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(5);
             if (targetQueue.Count == 0) FillQueue();
-            targetWander = targetQueue.Dequeue();
-            targetChange = targetWander;
-            targetObjectRandom.transform.position = targetWander;
+            targetChange = targetQueue.Dequeue();
+            //print(targetChange);
+            //targetWander = targetQueue.Dequeue();
+            //targetChange = targetWander;
+            yield return new WaitForSeconds(5);
+            //targetObjectRandom.transform.position = targetWander;
         }
     }
     #endregion
