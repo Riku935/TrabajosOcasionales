@@ -8,11 +8,12 @@ public class PlayerController : MonoBehaviour
     private Vector3 _target;
     public Seek seek;
     public RunAway runAway;
+    public PathFollowing pathFollow;
 
     private void FixedUpdate()
     {
         Vector3 mouseTarget = camera.ScreenToWorldPoint(Input.mousePosition);
         _target = new Vector3(mouseTarget.x, mouseTarget.y, 0.0f);
-        runAway.Target = _target;
+        pathFollow.Target = _target;
     }
 }
