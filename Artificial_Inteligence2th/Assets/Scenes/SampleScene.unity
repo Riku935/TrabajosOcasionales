@@ -353,6 +353,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d48788b07bdad594f8f0479fdc98382c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  runAwayCircle: 5
-  safeRadius: 10
+  speed: 5
+  runAwayCircle: 3
+  safeRadius: 5

@@ -9,17 +9,31 @@ public class RunAway : Steering
 
     private void Update()
     {
-        
+    }
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(Position, runAwayCircle);
     }
     public override Vector3 GetForce()
     {
-        Vector3 circleCenter = Velocity.normalized * runAwayCircle;
-        Debug.DrawLine(Position, Position + circleCenter, Color.green);
+        Vector3 circleCenter = Velocity.normalized * -runAwayCircle;
+        Vector3 circleEnd = Position + circleCenter;
+        //float distanceCirclePlayer = Vector3.Distance(circleEnd, Target);
+        //Debug.DrawLine(Position, Position + circleCenter, Color.green);
+        //Debug.DrawLine(circleEnd, Target, Color.red);
+        //Debug.Log(Target.magnitude);
 
-
-        DesiredVelocity = (Target - Position).normalized * speed;
-        return (DesiredVelocity - Velocity) * -1;
-        
+        if(Target.magnitude < safeRadius)
+        {
+            DesiredVelocity = (Target - Position).normalized * speed;
+            return (DesiredVelocity - Velocity) * -1;
+        }
+        if (Target.magnitude > safeRadius)
+        {
+            return Vector3.zero;
+        }
+        return Vector3.zero;
     }
 
 }
