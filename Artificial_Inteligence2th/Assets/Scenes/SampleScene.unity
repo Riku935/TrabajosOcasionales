@@ -221,6 +221,7 @@ GameObject:
   - component: {fileID: 1837208785}
   - component: {fileID: 1837208784}
   - component: {fileID: 1837208789}
+  - component: {fileID: 1837208790}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -243,6 +244,7 @@ MonoBehaviour:
   camera: {fileID: 519420031}
   seek: {fileID: 1837208785}
   runAway: {fileID: 1837208789}
+  pathFollow: {fileID: 1837208790}
 --- !u!114 &1837208785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,7 +273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   behaviors:
-  - {fileID: 1837208789}
+  - {fileID: 1837208790}
   maxSpeed: 5
   maxForce: 5
 --- !u!212 &1837208787
