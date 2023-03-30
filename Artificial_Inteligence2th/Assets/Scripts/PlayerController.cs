@@ -14,6 +14,6 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 mouseTarget = camera.ScreenToWorldPoint(Input.mousePosition);
         _target = new Vector3(mouseTarget.x, mouseTarget.y, 0.0f);
-        pathFollow.Target = _target;
+        runAway.Target = _target;
     }
 }
