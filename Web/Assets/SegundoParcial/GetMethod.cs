@@ -8,6 +8,8 @@ public class GetMethod : MonoBehaviour
 {
     InputField outputArea;
 
+    public InputField url;
+
     void Start()
     {
         outputArea = GameObject.Find("OutputArea").GetComponent<InputField>();
@@ -19,7 +21,7 @@ public class GetMethod : MonoBehaviour
     IEnumerator GetData_Coroutine()
     {
         outputArea.text = "Loading...";
-        string uri = "http://localhost:5057/api/releaseditems";
+        string uri = url.text.ToString();
         using (UnityWebRequest request = UnityWebRequest.Get(uri))
         {
             yield return request.SendWebRequest();
