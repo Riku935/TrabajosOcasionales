@@ -283,6 +283,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 1438593368}
+  grid: {fileID: 398878722}
+  cellSize: 1
 --- !u!4 &1242204204
 Transform:
   m_ObjectHideFlags: 0

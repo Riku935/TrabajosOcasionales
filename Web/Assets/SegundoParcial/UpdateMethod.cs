@@ -10,7 +10,7 @@ public class UpdateMethod : MonoBehaviour
 {
     class PostItem
     {
-        public string i_d;
+        public string id;
         public string Game_Name;
         public bool IsReleased;
         public string ReleaseDay;
@@ -19,7 +19,7 @@ public class UpdateMethod : MonoBehaviour
 
         public PostItem(string ID ,string gameName, bool released, string day, string month, string year)
         {
-            i_d = ID;
+            id = ID;
             this.Game_Name = gameName;
             IsReleased = released;
             ReleaseDay = day;
@@ -36,7 +36,7 @@ public class UpdateMethod : MonoBehaviour
     [SerializeField] InputField year;
 
     [SerializeField] InputField urlField;
-    [SerializeField] InputField id;
+    [SerializeField] InputField ids;
 
     //public int id;
 
@@ -59,8 +59,8 @@ public class UpdateMethod : MonoBehaviour
     }
     async Task PostRequest()
     {
-        string url = urlField.text.ToString()+"/"+id;
-        PostItem mypost = new PostItem(id.text.ToString(),nameGame.text.ToString(), gameReleased, day.text.ToString(), month.text.ToString(), year.text.ToString());
+        string url = urlField.text.ToString()+"/"+ids.text.ToString();
+        PostItem mypost = new PostItem(ids.text.ToString(),nameGame.text.ToString(), gameReleased, day.text.ToString(), month.text.ToString(), year.text.ToString());
         string payload = JsonUtility.ToJson(mypost);
         UploadHandler customUploadHandler = new UploadHandlerRaw(
             System.Text.Encoding.UTF8.GetBytes(payload));
