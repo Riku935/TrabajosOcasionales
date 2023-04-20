@@ -8,6 +8,7 @@ public class ClickPosition : MonoBehaviour
     public Tilemap tilemap;
     public Grid grid;
     public float cellSize;
+    public Search sr;
 
     private void Update()
     {
@@ -17,12 +18,8 @@ public class ClickPosition : MonoBehaviour
             Vector3Int cellPosition = grid.WorldToCell(new Vector3(mousePosition.x, mousePosition.y, 0f));
             Vector3 worldPosition = grid.CellToWorld(cellPosition) + new Vector3(cellSize / 2f, cellSize / 2f, 0f);
             Debug.Log("Clicked on cell " + cellPosition + " at position " + worldPosition);
+            sr._origin = cellPosition;
+            sr.StartCoroutine(sr.FloodFill2D());
         }
-    }
-    private void Click()
-    {
-        Vector3Int cellPosition = tilemap.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-
-        Debug.Log("Clicked on tile at position (" + cellPosition.x + ", " + cellPosition.y + ")");
     }
 }
