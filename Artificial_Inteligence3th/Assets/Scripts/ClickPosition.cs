@@ -18,7 +18,7 @@ public class ClickPosition : MonoBehaviour
             Vector3Int cellPosition = grid.WorldToCell(new Vector3(mousePosition.x, mousePosition.y, 0f));
             Vector3 worldPosition = grid.CellToWorld(cellPosition) + new Vector3(cellSize / 2f, cellSize / 2f, 0f);
             Debug.Log("Clicked on cell " + cellPosition + " at position " + worldPosition);
-            sr._origin = cellPosition;
+            sr.Origin = cellPosition;
             sr.StartCoroutine(sr.FloodFill2D());
         }
     }
