@@ -37,6 +37,7 @@ public class DijkstraAlgorithm : MonoBehaviour
                 {
                     yield return new WaitForSeconds(delay);
                     _costSoFar[next] = newCost;
+                    //_costSoFar[next] = GetHeuristic(Goal, newCost);
                     _frontier.Enqueue(next, newCost);
                     _came[next] = current;
                 }
@@ -90,5 +91,9 @@ public class DijkstraAlgorithm : MonoBehaviour
 
 
         }
+    }
+    float GetHeuristic(Vector3 a, Vector3 b)
+    {
+        return Vector3.Distance(a, b);
     }
 }
