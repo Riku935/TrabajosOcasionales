@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System;
 
 public class Search : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class Search : MonoBehaviour
     public TileBase pathTile;
     public float delay = 0.4f;
     private bool isEarlyExit = false;
+    public bool earlyExit;
 
     public IEnumerator FloodFill2D()
     {
@@ -28,7 +30,7 @@ public class Search : MonoBehaviour
             {
                 if (next == Goal)
                 {
-                    isEarlyExit = true;
+                    if (earlyExit) isEarlyExit = true;
                 }
                 if (!_came.ContainsKey(next))
                 {

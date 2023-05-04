@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System;
 
 public class TileSelector : MonoBehaviour
 {
@@ -16,11 +17,25 @@ public class TileSelector : MonoBehaviour
     private Dictionary<Tilemap, Vector3Int> _origin = new Dictionary<Tilemap, Vector3Int>();
     private Dictionary<Tilemap, Vector3Int> _goal = new Dictionary<Tilemap, Vector3Int>();
 
-    public DijkstraAlgorithm floodFill;
+    public Search floodFill;
+    public DijkstraAlgorithm dijkstra;
+    public HeuristicDijkstra heuristic;
+
+    private enum AlgorithmType
+    {
+        FloodFill, Heuristic, A_Algorithm, Dijkstra
+    }
+
+    [SerializeField] private AlgorithmType _type;
+    private Dictionary<string, Action> _actions = new Dictionary<string, Action>();
+
     private void Start()
     {
         _previousPosition[tilemap] = new Vector3Int(-1, -1, 0);
-        //_origin[tilemap] = new Vector3Int(0, 0, 0);
+        _actions.Add("FloodFill", StartFloodFill); //Añades acciones al diccionario 
+        _actions.Add("Heuristic", StartHeuristic);
+        _actions.Add("A_Algorithms", StartA);
+        _actions.Add("Dijkstra", StartDijkstra);
     }
 
     private void Update()
@@ -36,7 +51,10 @@ public class TileSelector : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.A)) 
         {
-            StartFloodFill();
+            if (_actions.TryGetValue(_type.ToString(), out Action action)) //Intenta buscar el nombre y si encuentra el nombre, ejecutas la accion
+            {
+                action(); //Ejecutas la accion
+            }
         }
     }
     private void DetectTileClick(bool isOrigin)
@@ -75,6 +93,33 @@ public class TileSelector : MonoBehaviour
     }
 
     private void StartFloodFill()
+    {
+        floodFill.Origin = _origin[tilemap];
+        floodFill.Goal = _goal[tilemap];
+        floodFill.tileMap = tilemap;
+        floodFill.visitedTile = originTile;
+        floodFill.pathTile = destinationTile;
+        StartCoroutine(floodFill.FloodFill2D());
+    }
+    private void StartHeuristic()
+    {
+        heuristic.Origin = _origin[tilemap];
+        heuristic.Goal = _goal[tilemap];
+        heuristic.tileMap = tilemap;
+        heuristic.visitedTile = originTile;
+        heuristic.pathTile = destinationTile;
+        StartCoroutine(heuristic.FloodFill2D());
+    }
+    private void StartDijkstra()
+    {
+        dijkstra.Origin = _origin[tilemap];
+        dijkstra.Goal = _goal[tilemap];
+        dijkstra.tileMap = tilemap;
+        dijkstra.visitedTile = originTile;
+        dijkstra.pathTile = destinationTile;
+        StartCoroutine(dijkstra.FloodFill2D());
+    }
+    private void StartA()
     {
         floodFill.Origin = _origin[tilemap];
         floodFill.Goal = _goal[tilemap];

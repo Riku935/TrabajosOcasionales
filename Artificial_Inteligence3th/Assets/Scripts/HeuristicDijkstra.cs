@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
-public class DijkstraAlgorithm : MonoBehaviour
+public class HeuristicDijkstra : MonoBehaviour
 {
     //private Queue<Vector3> _frontier = new Queue<Vector3>();
     private Dictionary<Vector3, Vector3> _came = new Dictionary<Vector3, Vector3>();
@@ -31,12 +30,12 @@ public class DijkstraAlgorithm : MonoBehaviour
             Vector3 current = _frontier.Dequeue();
             foreach (Vector3 next in GetNeighbours(current))
             {
-                if(next == Goal) isEarlyExit = true;
+                if (next == Goal) isEarlyExit = true;
                 var newCost = _costSoFar[current] + GetCost(next);
                 if (!_costSoFar.ContainsKey(next) || newCost < _costSoFar[next])
                 {
                     yield return new WaitForSeconds(delay);
-                    _costSoFar[next] = newCost;
+                    _costSoFar[next] = GetHeuristic(Goal, next);
                     _frontier.Enqueue(next, newCost);
                     _came[next] = current;
                 }
@@ -90,5 +89,9 @@ public class DijkstraAlgorithm : MonoBehaviour
 
 
         }
+    }
+    float GetHeuristic(Vector3 a, Vector3 b)
+    {
+        return Vector3.Distance(a, b);
     }
 }
