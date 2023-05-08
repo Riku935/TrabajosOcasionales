@@ -59,11 +59,11 @@ public class Aalgorithm : MonoBehaviour
 
         double cost = nextTile.name switch
         {
-            "isometric_angled_pixel_0005" => 5,
+            "isometric_angled_pixel_0005" => 50,
             "isometric_angled_pixel_0010" => 3,
             "isometric_angled_pixel_0015" => 1,
             "isometric_angled_pixel_0007" => 4,
-            "isometric_angled_pixel_0011" => 10,
+            "isometric_angled_pixel_0011" => 50,
             _ => 1
         };
         return cost;

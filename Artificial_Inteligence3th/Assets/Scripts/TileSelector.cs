@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
+using System.Reflection;
 
 public class TileSelector : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class TileSelector : MonoBehaviour
     public Search floodFill;
     public DijkstraAlgorithm dijkstra;
     public HeuristicDijkstra heuristic;
+    public Aalgorithm aAlgorithm;
 
     private enum AlgorithmType
     {
@@ -34,7 +36,7 @@ public class TileSelector : MonoBehaviour
         _previousPosition[tilemap] = new Vector3Int(-1, -1, 0);
         _actions.Add("FloodFill", StartFloodFill); //Añades acciones al diccionario 
         _actions.Add("Heuristic", StartHeuristic);
-        _actions.Add("A_Algorithms", StartA);
+        _actions.Add("A_Algorithm", StartA);
         _actions.Add("Dijkstra", StartDijkstra);
     }
 
@@ -80,14 +82,30 @@ public class TileSelector : MonoBehaviour
     }
     private void SelectTile()
     {
+        //Vector3 mousePosition = main.ScreenToWorldPoint(Input.mousePosition);
+        //Vector3Int tilePosition = tilemap.WorldToCell(mousePosition);
+        //tilePosition.z = 0;
+
+        //if (tilemap.HasTile(tilePosition))
+        //{
+        //    tilemap.SetTransformMatrix(tilePosition, Matrix4x4.TRS(offSet, Quaternion.Euler(0,0,0), Vector3.one));
+        //    tilemap.SetTransformMatrix(_previousPosition[tilemap], Matrix4x4.identity);
+        //    _previousPosition[tilemap] = tilePosition;
+        //}
         Vector3 mousePosition = main.ScreenToWorldPoint(Input.mousePosition);
         Vector3Int tilePosition = tilemap.WorldToCell(mousePosition);
         tilePosition.z = 0;
 
-        if (tilemap.HasTile(tilePosition))
+        if (tilePosition != _previousPosition[tilemap])
         {
-            tilemap.SetTransformMatrix(tilePosition, Matrix4x4.TRS(offSet, Quaternion.Euler(0,0,0), Vector3.one));
-            tilemap.SetTransformMatrix(_previousPosition[tilemap], Matrix4x4.identity);
+            if (tilemap.HasTile(tilePosition))
+            {
+                tilemap.SetTransformMatrix(tilePosition, Matrix4x4.TRS(offSet, Quaternion.Euler(0, 0, 0), Vector3.one));
+            }
+            if (tilemap.HasTile(_previousPosition[tilemap]))
+            {
+                tilemap.SetTransformMatrix(_previousPosition[tilemap], Matrix4x4.identity);
+            }
             _previousPosition[tilemap] = tilePosition;
         }
     }
@@ -121,11 +139,11 @@ public class TileSelector : MonoBehaviour
     }
     private void StartA()
     {
-        floodFill.Origin = _origin[tilemap];
-        floodFill.Goal = _goal[tilemap];
-        floodFill.tileMap = tilemap;
-        floodFill.visitedTile = originTile;
-        floodFill.pathTile = destinationTile;
-        StartCoroutine(floodFill.FloodFill2D());
+        aAlgorithm.Origin = _origin[tilemap];
+        aAlgorithm.Goal = _goal[tilemap];
+        aAlgorithm.tileMap = tilemap;
+        aAlgorithm.visitedTile = originTile;
+        aAlgorithm.pathTile = destinationTile;
+        StartCoroutine(aAlgorithm.FloodFill2D());
     }
 }
