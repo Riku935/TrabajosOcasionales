@@ -5,41 +5,35 @@ using UnityEngine.Tilemaps;
 using System;
 using System.Reflection;
 
-public class TileSelector : MonoBehaviour
+public class TileTest : MonoBehaviour
 {
-    //tilemap render mode individual
-    //preferences-graphics custom axis 0 1 -1
     public Camera main;
     public Tilemap tilemap;
     public Vector3 offset = new Vector3(0f, 0.1f, 0);
     public TileBase originTile;
     public TileBase destinationTile;
 
-    private SpriteRenderer selectedPlayerSprite;
+    [SerializeField] private SpriteRenderer playerSprite;
 
     Vector3Int tilePosition;
 
     public DijTest scanArea;
 
     private bool _isPlayerSelected;
+    public float moveSpeed = 5f;
 
     private Dictionary<Tilemap, Vector3Int> _previousPosition = new Dictionary<Tilemap, Vector3Int>();
     private Dictionary<Tilemap, Vector3Int> _origin = new Dictionary<Tilemap, Vector3Int>();
     private Dictionary<Tilemap, Vector3Int> _goal = new Dictionary<Tilemap, Vector3Int>();
 
-    private enum SearchTipe
-    {
-        FloodFill, Dijkstra, Heuristic, Astar
-    }
 
-    [SerializeField] private SearchTipe _type = SearchTipe.FloodFill;
     private Dictionary<string, Action> _actions = new Dictionary<string, Action>();
+
+
 
 
     private void Start()
     {
-
-        // inicializa posicion previa
         _previousPosition[tilemap] = new Vector3Int(-1, -1, 0);
         _origin[tilemap] = new Vector3Int(-1, -1, 0);
     }
@@ -47,15 +41,24 @@ public class TileSelector : MonoBehaviour
     private void Update()
     {
         SelectTile();
-
+        
         if (Input.GetMouseButtonDown(0))
         {
-            DetectTileClick(isOrigin: true);
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+            if (hit && hit.collider.GetComponent<SpriteRenderer>() == playerSprite)
+            {
+                Debug.Log(hit.collider.gameObject.name);
+                _origin[tilemap] = tilePosition;
+            }
+            else
+            {
+                DetectTileClick(isOrigin: true);
+            }
             _isPlayerSelected = true;
             ShowMovementArea();
         }
-        if (_isPlayerSelected) DetectTileClick(isOrigin: false);
-        if (_isPlayerSelected) scanArea.DrawPath(tilePosition);
+
 
     }
 
@@ -107,7 +110,16 @@ public class TileSelector : MonoBehaviour
         Vector3Int cellPosition = tilemap.WorldToCell(new Vector3(mousePosition.x, mousePosition.y, 0f));
         Vector3 worldPosition = tilemap.CellToWorld(cellPosition) + new Vector3(1 / 2f, 1 / 2f, 0f);
         Debug.Log("Clicked on cell " + cellPosition + " at position " + worldPosition);
-        scanArea.Origin = cellPosition;
+        if (_origin.ContainsKey(tilemap))
+        {
+            scanArea.Origin = _origin[tilemap];
+        }
+        else
+        {
+            scanArea.Origin = cellPosition;
+        }
         scanArea.StartCoroutine(scanArea.FloodField(0.01f));
     }
+
+
 }

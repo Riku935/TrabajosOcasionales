@@ -4,17 +4,25 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.Threading.Tasks;
 
-public class DijTest : MonoBehaviour
+public class Player : MonoBehaviour
 {
+    [SerializeField] GameObject sprite;
+    [SerializeField] TileBase playerSprite;
+
+    public List<Vector3Int> _pathNodes = new List<Vector3Int>();
+
     [SerializeField] private float maxSteps;
     [SerializeField] Tilemap deMap;
+    [SerializeField] Tilemap playerMap;
     public Vector3 Origin { get; set; }
     public Vector3 Goal { get; set; }
     public Tilemap tileMap;
     public float DelayTime;
     public TileBase TBase;
     public TileBase visitedTile, pathTile;
+    public bool IsPlayerSelected = false;
 
     private PriorityQueue<Vector3> _frontier = new PriorityQueue<Vector3>();
     private Dictionary<Vector3, Vector3> _cameFrom = new Dictionary<Vector3, Vector3>();
@@ -22,7 +30,11 @@ public class DijTest : MonoBehaviour
     private Dictionary<Vector3Int, TileBase> _oldTile = new Dictionary<Vector3Int, TileBase>();
     private float _steps;
 
-    public List<Vector3Int> _pathNodes = new List<Vector3Int>();
+    private void Start()
+    {
+       
+    }
+
     public void StartScan()
     {
         StartCoroutine(FloodField(DelayTime));
@@ -52,8 +64,6 @@ public class DijTest : MonoBehaviour
                 }
             }
         }
-
-        //DrawPath(Goal);
     }
 
 
@@ -62,11 +72,10 @@ public class DijTest : MonoBehaviour
         var nextTile = tileMap.GetTile(new Vector3Int((int)next.x, (int)next.y, (int)next.z));
         double cost = nextTile.name switch
         {
-            "isometric_angled_pixel_0036" => 5000,
-            "isometric_angled_pixel_0059" => 500,
-            "isometric_angled_pixel_0035" => 20,
-            "isometric_angled_pixel_0043" => 3,
-            "isometric_angled_pixel_0015" => 2,
+            "grass" => 1,
+            "sand" => 2,
+            "corn(1)" => 4,
+            "wheat(1)" => 100000000000,
             _ => 1
         };
 
@@ -93,7 +102,8 @@ public class DijTest : MonoBehaviour
 
     private void ValidateCoord(Vector3 next, List<Vector3> coordList)
     {
-        Vector3Int nextInt = new Vector3Int((int)next.x, (int)next.y, (int)next.z);
+        Dictionary<Vector3Int, TileBase> _oldT = new Dictionary<Vector3Int, TileBase>();
+    Vector3Int nextInt = new Vector3Int((int)next.x, (int)next.y, (int)next.z);
         if (_cameFrom.ContainsValue(next)) { return; }
         if (!tileMap.HasTile(nextInt)) { return; }
         if (_frontier.Contains(nextInt)) { return; }
@@ -106,8 +116,10 @@ public class DijTest : MonoBehaviour
 
     public void DrawPath(Vector3 goal)
     {
+        
         if (_oldTile.Count > 0)
         {
+            _pathNodes.Clear();
             Debug.Log("0");
             Vector3 currentReturn = Origin;
 
@@ -116,6 +128,7 @@ public class DijTest : MonoBehaviour
                 Vector3Int currentint = _oldTile.ElementAt(i).Key;
                 TileBase tile = _oldTile.ElementAt(i).Value;
                 deMap.SetTile(currentint, tile); // usar el tile original en lugar de pathtile
+              //  playerMap.SetTile(currentint, tile);
             }
         }
 
@@ -130,8 +143,55 @@ public class DijTest : MonoBehaviour
             }
             if (!deMap.HasTile(currentInt)) { return; }
             deMap.SetTile(currentInt, pathTile);
+            // playerMap.SetTile(currentInt, playerSprite);
+            _pathNodes.Add(currentInt);
             current = _cameFrom[current];
-
+            
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int cellPosition = playerMap.WorldToCell(new Vector3(mousePosition.x, mousePosition.y, 0f));
+            Goal = cellPosition;
+           // current = _cameFrom[Goal];
+           Vector3Int currentInt = new Vector3Int((int)current.x, (int)current.y, (int)current.z);
+
+            int indexNodes = _pathNodes.Count-1;
+            Vector3Int newVi = _pathNodes[indexNodes];
+            //  playerMap.SetTile(newVi, playerSprite);
+
+            move();
+           //playerMap.SetTile(cellPosition, playerSprite);
+        }
+    }
+
+    async void move()
+    {
+        for (int i = _pathNodes.Count - 1; i >= 0; i--)
+        {
+            playerMap.SetTile(_pathNodes[i], playerSprite);
+            await Task.Delay(1000);
+            if (i!=0)
+            {
+                playerMap.ClearAllTiles();
+            }
+           
+        }
+    }
+    private IEnumerator MovePlayer()
+    { 
+         yield return new WaitForSecondsRealtime(1f);
+       
+    }
+
+
+    public void ClearTiles()
+    {
+        playerMap.ClearAllTiles();
+        deMap.ClearAllTiles();
+        _frontier.Enqueue(Origin, 0);
+        _cameFrom[Origin] = Vector3.zero;
+        _costSoFar[Origin] = 0;
     }
 }

@@ -51,7 +51,7 @@ public class TileSelector : MonoBehaviour
         {
             DetectTileClick(false);
         }
-        if(Input.GetKeyDown(KeyCode.A)) 
+        if(Input.GetKeyDown(KeyCode.Space)) 
         {
             if (_actions.TryGetValue(_type.ToString(), out Action action)) //Intenta buscar el nombre y si encuentra el nombre, ejecutas la accion
             {
