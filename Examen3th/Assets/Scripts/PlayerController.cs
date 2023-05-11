@@ -45,6 +45,14 @@ public class PlayerController : MonoBehaviour
 
     //    }
     //}
+    private void PlayerObject(GameObject player)
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            hit = Physics2D.Raycast(ray.origin, ray.direction);
+        }
+    }
     void Mover()
     {
         if (Input.GetKeyDown(KeyCode.G))
