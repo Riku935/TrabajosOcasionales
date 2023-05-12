@@ -4,16 +4,17 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Threading.Tasks;
+using static UnityEditor.PlayerSettings;
 
-public class Tile : MonoBehaviour
+public class TileSelector : MonoBehaviour
 {
     [SerializeField] Camera main;
     [SerializeField] Grid grid;
     public Tilemap tileMap;
-    public Tilemap araña;
     public Tilemap ogro;
+    public Tilemap demonio;
     public Tilemap cosoFeo;
-    public Tilemap Demonio;
+    public Tilemap araña;
     public Vector3 offset = new Vector3(0f, 0.02f, 0f);
     public TileBase originTile, destinyTile;
 
@@ -24,7 +25,10 @@ public class Tile : MonoBehaviour
     private Dictionary<Tilemap, Vector3Int> _origin = new Dictionary<Tilemap, Vector3Int>();
     private Dictionary<Tilemap, Vector3Int> _goal = new Dictionary<Tilemap, Vector3Int>();
 
-    [SerializeField] Araña scanArea;
+    [SerializeField] Ogro ogro2;   //Infanteria
+    [SerializeField] Demonio demonio2; //Tank
+    [SerializeField] CosoFeo cosoFeo2;  //Reco
+    [SerializeField] Araña araña2;  //Caballeria
 
     bool _isPlayerSelected = false;
     Vector3Int tilePosition;
@@ -37,64 +41,124 @@ public class Tile : MonoBehaviour
 
     private void Update()
     {
-        if (!scanArea.IsPlayerSelected) SelectTile();
+        if (!ogro2.IsPlayerSelected) SelectTile();
 
         if (Input.GetMouseButtonDown(0))
         {
-            if (araña.HasTile(tilePosition))
-            {
-
-                scanArea.maxSteps = 30;
-                DetectTileClick(isOrigin: true);
-                scanArea.IsPlayerSelected = true;
-                ShowMovementArea();
-                DetectTileClick(isOrigin: false);
-
-            }
-
             if (ogro.HasTile(tilePosition))
             {
-
-                scanArea.maxSteps = 50;
+               
+                ogro2.maxSteps = 30;
                 DetectTileClick(isOrigin: true);
-                scanArea.IsPlayerSelected = true;
+                ogro2.IsPlayerSelected = true;
                 ShowMovementArea();
                 DetectTileClick(isOrigin: false);
-
+                 
+            }
+            
+            if (demonio.HasTile(tilePosition))
+            {
+               
+                    demonio2.maxSteps = 50;
+                    DetectTileClick(isOrigin: true);
+                    demonio2.IsPlayerSelected = true;
+                    ShowMovementArea();
+                    DetectTileClick(isOrigin: false);
+              
             }
 
             if (cosoFeo.HasTile(tilePosition))
             {
 
-                scanArea.maxSteps = 60;
+                cosoFeo2.maxSteps = 60;
                 DetectTileClick(isOrigin: true);
-                scanArea.IsPlayerSelected = true;
+                cosoFeo2.IsPlayerSelected = true;
                 ShowMovementArea();
                 DetectTileClick(isOrigin: false);
 
             }
 
-            if (Demonio.HasTile(tilePosition))
+            if (araña.HasTile(tilePosition))
             {
 
-                scanArea.maxSteps = 60;
+                araña2.maxSteps = 60;
                 DetectTileClick(isOrigin: true);
-                scanArea.IsPlayerSelected = true;
+                araña2.IsPlayerSelected = true;
                 ShowMovementArea();
                 DetectTileClick(isOrigin: false);
 
             }
         }
-        if (scanArea.IsPlayerSelected)
+
+        if (ogro2.IsPlayerSelected)
         {
             DetectTileClick(isOrigin: false);
-            scanArea.DrawPath(tilePosition);
+            ogro2.DrawPath(tilePosition);
+           
         }
-        if (scanArea.IsPlayerSelected && Input.GetKeyDown(KeyCode.Return)) scanArea.MovePlayer();
+
+        if (demonio2.IsPlayerSelected)
+        {
+            DetectTileClick(isOrigin: false);
+           
+            demonio2.DrawPath(tilePosition);
+           
+        }
+
+        if (cosoFeo2.IsPlayerSelected)
+        {
+            DetectTileClick(isOrigin: false);
+            
+            cosoFeo2.DrawPath(tilePosition);
+           
+        }
+
+        if (araña2.IsPlayerSelected)
+        {
+            DetectTileClick(isOrigin: false);
+           
+            araña2.DrawPath(tilePosition);
+        }
+
+        if (ogro2.IsPlayerSelected  && Input.GetKeyDown(KeyCode.Return))
+        {
+            DetectTileClick(isOrigin: false);
+            ogro2.MovePlayer();
+           
+        }
+
+        if (demonio2.IsPlayerSelected && Input.GetKeyDown(KeyCode.Return))
+        {
+            DetectTileClick(isOrigin: false);
+            demonio2.MovePlayer();
+            
+        }
+
+        if (cosoFeo2.IsPlayerSelected && Input.GetKeyDown(KeyCode.Return))
+        {
+            DetectTileClick(isOrigin: false);
+            cosoFeo2.MovePlayer();
+           
+        }
+
+        if (araña2.IsPlayerSelected && Input.GetKeyDown(KeyCode.Return))
+        {
+            DetectTileClick(isOrigin: false);
+            araña2.MovePlayer();
+        }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            scanArea.IsPlayerSelected = false;
-            scanArea.ClearTiles();
+            ogro2.IsPlayerSelected = false;
+            ogro2.ClearTiles();
+
+            demonio2.IsPlayerSelected = false;
+            demonio2.ClearTiles();
+
+            cosoFeo2.IsPlayerSelected = false;
+            cosoFeo2.ClearTiles();
+
+            araña2.IsPlayerSelected = false;
+            araña2.ClearTiles();
         }
 
     }
@@ -143,7 +207,18 @@ public class Tile : MonoBehaviour
         Vector3Int cellPosition = grid.WorldToCell(new Vector3(mousePosition.x, mousePosition.y, 0f));
         Vector3 worldPosition = grid.CellToWorld(cellPosition) + new Vector3(1 / 2f, 1 / 2f, 0f);
         Debug.Log("Clicked on cell " + cellPosition + " at position " + worldPosition);
-        scanArea.Origin = cellPosition;
-        scanArea.StartScan();
+        ogro2.Origin = cellPosition;
+        ogro2.StartScan();
+
+        demonio2.Origin = cellPosition;
+        demonio2.StartScan();
+
+        cosoFeo2.Origin = cellPosition;
+        cosoFeo2.StartScan();
+
+        araña2.Origin = cellPosition;
+        araña2.StartScan();
     }
+
+
 }

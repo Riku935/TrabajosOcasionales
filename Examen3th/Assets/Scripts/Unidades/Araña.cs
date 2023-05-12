@@ -19,7 +19,7 @@ public class Araña : MonoBehaviour
     public bool IsPlayerSelected = false;
     public Vector3 Goal { get; set; }
     public Vector3 Origin { get; set; }
-    public Tile ts;
+    public TileSelector ts;
 
     private PriorityQueue<Vector3> _frontier = new PriorityQueue<Vector3>();
     private Dictionary<Vector3, Vector3> _cameFrom = new Dictionary<Vector3, Vector3>();
@@ -65,18 +65,12 @@ public class Araña : MonoBehaviour
         var nextTile = tileMap.GetTile(new Vector3Int((int)next.x, (int)next.y, (int)next.z));
         double cost = nextTile.name switch
         {
-            "ground_grass" => 1,
-            "ground_asphalt" => 400,
-            "road_t_a" => 500,
-            "road_straight_a" => 500,
-            "road_straight_b" => 500,
-            "road_end_c" => 500,
-            "road_t_c" => 500,
-            "road_end_d" => 500,
-            "road_end_a" => 500,
-            "road_end_b" => 500,
-            "crops_plowed_growth" => 200,
-            "ground_water" => 300,
+            "tinyBlocks_82" => 1,
+            "tinyBlocks_83" => 100,
+            "tinyBlocks_88" => 5,
+            "tinyBlocks_81" => 100,
+            "tinyBlocks_84" => 100,
+            "tinyBlocks_80" => 50,
 
             _ => 1
         };
@@ -155,7 +149,7 @@ public class Araña : MonoBehaviour
     {
         Vector3 current = Goal;
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3Int cellPosition = ts.araña.WorldToCell(new Vector3(mousePosition.x, mousePosition.y, 0f));
+        Vector3Int cellPosition = ts.cosoFeo.WorldToCell(new Vector3(mousePosition.x, mousePosition.y, 0f));
         Goal = cellPosition;
         // current = _cameFrom[Goal];
         Vector3Int currentInt = new Vector3Int((int)current.x, (int)current.y, (int)current.z);

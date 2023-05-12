@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Threading.Tasks;
 
-public class CosoFeo : MonoBehaviour
+public class Reconocimiento : MonoBehaviour
 {
     public float maxSteps;
     [SerializeField] Tilemap deMap;
@@ -65,12 +65,18 @@ public class CosoFeo : MonoBehaviour
         var nextTile = tileMap.GetTile(new Vector3Int((int)next.x, (int)next.y, (int)next.z));
         double cost = nextTile.name switch
         {
-            "tinyBlocks_82" => 1,
-            "tinyBlocks_83" => 100,
-            "tinyBlocks_88" => 5,
-            "tinyBlocks_81" => 15,
-            "tinyBlocks_84" => 40,
-            "tinyBlocks_80" => 50,
+            "ground_grass" => 1,
+            "ground_asphalt" => 400,
+            "road_t_a" => 500,
+            "road_straight_a" => 500,
+            "road_straight_b" => 500,
+            "road_end_c" => 500,
+            "road_t_c" => 500,
+            "road_end_d" => 500,
+            "road_end_a" => 500,
+            "road_end_b" => 500,
+            "crops_plowed_growth" => 200,
+            "ground_water" => 300,
 
             _ => 1
         };
