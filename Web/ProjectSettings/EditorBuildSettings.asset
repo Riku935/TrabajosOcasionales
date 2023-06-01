@@ -8,7 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/PrimerParcial/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/SegundoParcial/SegundoParcial.unity
     guid: 96d6d9e0a45b6b5439b026d7eab0dfd9
+  - enabled: 1
+    path: Assets/TercerParcial/Escenas/CuartoParcial.unity
+    guid: 7ab43651a9e5b0143a47465ff91d1322
   m_configObjects: {}
