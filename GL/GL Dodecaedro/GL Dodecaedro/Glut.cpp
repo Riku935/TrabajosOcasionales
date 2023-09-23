@@ -58,61 +58,46 @@ void display() {
 
     //Pentagono 1.0 (Lado Izq) Color negro y a la derecha
     glBegin(GL_POLYGON);
-    glColor3f(1.0f, 0.0f, 0.0f); // Color rojo
-    glVertex3f(-2.62f, 1.7f, 2.23f); // Vértice inf izq -C1
-    glColor3f(0.0f, 1.0f, 0.0f); // Color verde
-    glVertex3f(-2.62f, 2.75f, 0.53f); // Vértice sup izq -D1
-    glColor3f(0.0f, 0.0f, 1.0f); // Color azul
-    glVertex3f(-2.12f, 2.23f, -0.16f); // Vértice sup der -P2
     glColor3f(0.0f, 1.0f, 1.0f); // Color cian
+    glVertex3f(-2.62f, 1.7f, 2.23f); // Vértice inf izq -C1
+    glVertex3f(-2.62f, 2.75f, 0.53f); // Vértice sup izq -D1
+    glVertex3f(-2.12f, 2.23f, -0.16f); // Vértice sup der -P2
     glVertex3f(-1.62f, 0.0f, 1.9f); // Vértice inf der -A1
     glEnd();
 
     //Pentagono 1.1 (Lado Der)
     glBegin(GL_POLYGON);
-    glColor3f(1.0f, 0.0f, 0.0f); // Color rojo
+    glColor3f(1.0f, 1.0f, 0.0f); // Amarillo (R=1, G=1, B=0)
     glVertex3f(-1.62f, 0.0f, 1.9f); // Vértice inf izq -A1
-    glColor3f(0.0f, 1.0f, 0.0f); // Color verde
     glVertex3f(-2.12f, 2.23f, -0.16f); // Vértice sup izq -P2
-    glColor3f(0.0f, 0.0f, 1.0f); // Color azul
     glVertex3f(-1.62f, 1.7f, -0.85f); // Vértice sup der -B1
-    glColor3f(0.0f, 1.0f, 1.0f); // Color cian
     glVertex3f(-1.0f, 0.0f, -0.0f); // Vértice sup izq -U
     glEnd();
 
     //Pentagono 2.0 (Lado Izq)
     glBegin(GL_POLYGON);
-    glColor3f(1.0f, 0.0f, 0.0f); // Color rojo
-    glVertex3f(-1.0f, 0.0f, -0.0f); // Vértice inf izq -U
     glColor3f(0.0f, 1.0f, 0.0f); // Color verde
+    glVertex3f(-1.0f, 0.0f, -0.0f); // Vértice inf izq -U
     glVertex3f(-1.62f, 1.7f, -0.85f); // Vértice sup izq -B1
-    glColor3f(0.0f, 0.0f, 1.0f); // Color azul
     glVertex3f(0.0f, 2.75f, -1.38f); // Vértice sup der -M1
-    glColor3f(0.0f, 1.0f, 1.0f); // Color cian
     glVertex3f(0.0f, 0.0f, 0.0f); // Vértice inf der -K2
     glEnd();
 
     //Pentagono 2.1 (Lado Der)
     glBegin(GL_POLYGON);
-    glColor3f(1.0f, 0.0f, 0.0f); // Color rojo
+    glColor3f(0.5f, 0.5f, 0.5f); // Gris (R=0.5, G=0.5, B=0.5)
     glVertex3f(0.0f, 0.0f, 0.0f); // Vértice inf izq -K2
-    glColor3f(0.0f, 1.0f, 0.0f); // Color verde
     glVertex3f(0.0f, 2.75f, -1.38f); // Vértice sup izq -M1
-    glColor3f(0.0f, 0.0f, 1.0f); // Color azul
     glVertex3f(1.62f, 1.7f, -0.85f); // Vértice sup der -T1
-    glColor3f(0.0f, 1.0f, 1.0f); // Color cian
     glVertex3f(1.0f, 0.0f, 0.0f); // Vértice inf der -V
     glEnd();
 
     //Pentagono 3.0 (Lado Izq)
     glBegin(GL_POLYGON);
-    glColor3f(1.0f, 0.0f, 0.0f); // Color rojo
-    glVertex3f(1.0f, 0.0f, 0.0f); // Vértice inf der -V
-    glColor3f(0.0f, 1.0f, 0.0f); // Color verde
-    glVertex3f(1.62f, 1.7f, -0.85f); // Vértice sup der -T1
-    glColor3f(0.0f, 0.0f, 1.0f); // Color azul
-    glVertex3f(2.12f, 2.23f, -0.16f); // Vértice sup der -M2
     glColor3f(0.0f, 1.0f, 1.0f); // Color cian
+    glVertex3f(1.0f, 0.0f, 0.0f); // Vértice inf der -V
+    glVertex3f(1.62f, 1.7f, -0.85f); // Vértice sup der -T1
+    glVertex3f(2.12f, 2.23f, -0.16f); // Vértice sup der -M2
     glVertex3f(1.69f, 0.0f, 1.9f); // Vértice inf der -C
     glEnd();
 
