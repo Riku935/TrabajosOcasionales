@@ -5,7 +5,7 @@ using UnityEngine;
 public class GunController : MonoBehaviour
 {
     [Header("Gun Settings")]
-    public float fireRate = 0.2f; 
+    public float fireRate = 0.2f;
     public int chargerSize = 30;   //Cantidad total de balas en el cargador
     public int reservedAmmo = 350; //Cantidad total de balas en la reserva
 
@@ -13,7 +13,7 @@ public class GunController : MonoBehaviour
     int currentCharger;  //Cantidad actual de balas en el cargador
     int currentReserved; //Cantidad actual de balas en la reserva
 
-    [Header ("Aim Settings")]
+    [Header("Aim Settings")]
     public Vector3 normalLocalPosition;
     public Vector3 aimingLocalPosition;
     public float aimSmooth = 1f;
@@ -25,13 +25,19 @@ public class GunController : MonoBehaviour
     public float ShootDistance = 10;
 
     [Header("VFX")]
-    public ParticleSystem flash; 
+    public ParticleSystem flash;
     public ParticleSystem shellDrop;
+
+    [Header("Audio")]
+    public AudioClip shootEffectSound;
+    private AudioSource audioSource;
+
 
     private void Start()
     {
         currentCharger = chargerSize;
         currentReserved = reservedAmmo;
+        audioSource = GetComponent<AudioSource>();
         canShoot = true; //Tobias Esto tenemos que iniciarlo desde el GameManager
     }
     private void Update()
@@ -90,13 +96,16 @@ public class GunController : MonoBehaviour
     private void Fire()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, ShootDistance, LayerMask.GetMask("shoot_interaction")))//lanza un rayo a la distancia establecida e interactua con el layermask
+        audioSource.clip = shootEffectSound;
+        audioSource.PlayOneShot(shootEffectSound, 0.7f);
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, ShootDistance, LayerMask.GetMask("Enemy")))//lanza un rayo a la distancia establecida e interactua con el layermask
         {
             /* Transform objectHit = hit.transform;
              Debug.Log(hit.transform.name);*/
-            hit.transform.GetComponent<ShootBase>().GetShoot();//manda a llamar el override de los codigos 
+            //hit.transform.GetComponent<ShootBase>().GetShoot();//manda a llamar el override de los codigos 
+            hit.transform.gameObject.SetActive(false);
         }
-      
+
     }
     private void ShowRay() //Este lo usamos un rato, cuando hagamos el build, quitamos este metodo
     {
