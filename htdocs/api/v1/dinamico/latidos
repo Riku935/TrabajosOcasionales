@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contador de Latidos</title>
+</head>
+<body>
+
+<form>
+    <label for="latidos">Ingresa tus latidos:</label>
+    <input type="number" id="latidos" name="latidos">
+    <button type="button" onclick="mostrarLatidos()">Mostrar Latidos</button>
+</form>
+
+<script>
+function mostrarLatidos() {
+    // Obtener el valor de latidos ingresado por el usuario
+    var latidos = document.getElementById("latidos").value;
+
+    // Verificar si se ingresó un número válido
+    if (!isNaN(latidos) && latidos !== "") {
+        // Mostrar un mensaje de alerta con los latidos ingresados
+        alert("Tus latidos son: " + latidos);
+    } else {
+        // Mostrar un mensaje de alerta si el valor ingresado no es válido
+        alert("Por favor, ingresa un número válido de latidos.");
+    }
+}
+</script>
+
+</body>
+</html>
+
+

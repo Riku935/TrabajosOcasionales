@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Consulta de Bolsa de Valores</title>
+    <style>
+        /* Agrega estilos CSS según sea necesario */
+    </style>
+</head>
+<body>
+    <h1>Consulta de Bolsa de Valores</h1>
+
+    <button id="getDataButton">Obtener Datos</button>
+
+    <div id="dataDisplay">
+        <!-- Aquí se mostrarán los datos obtenidos -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const getDataButton = document.getElementById('getDataButton');
+            const dataDisplay = document.getElementById('dataDisplay');
+            
+            // Función para realizar una solicitud aleatoria
+            function realizarSolicitudAleatoria() {
+                // Reemplaza 'TU_API_KEY' con tu clave de API de Alpha Vantage
+                const api_key = 'TU_API_KEY';
+                const symbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN']; // Agrega los símbolos que desees
+
+                // Selecciona un símbolo aleatorio de la lista
+                const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+
+                // Endpoint de la API de Alpha Vantage para obtener datos de precios
+                const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=1min&apikey=${api_key}`;
+                
+                // Realiza la solicitud GET a la API
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Muestra los datos obtenidos en el div
+                        dataDisplay.innerHTML = JSON.stringify(data, null, 2);
+                    })
+                    .catch(error => {
+                        console.error('Error en la solicitud:', error);
+                        dataDisplay.innerHTML = 'Error en la solicitud';
+                    });
+            }
+
+            // Llama a la función para realizar una solicitud aleatoria al cargar la página
+            realizarSolicitudAleatoria();
+
+            getDataButton.addEventListener('click', realizarSolicitudAleatoria);
+        });
+    </script>
+</body>
+</html>
