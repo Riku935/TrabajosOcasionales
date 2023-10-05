@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class Request : MonoBehaviour
 {
@@ -11,13 +12,29 @@ public class Request : MonoBehaviour
     private string rutaArchivo = "C:\\Apache24\\htdocs\\api\\v1\\dinamico\\score";
 
     private string responseText;
+    public InputField ipsInputField;
+
+    public List<string> ipsList = new List<string>();
+
+    public List<string> namesList = new List<string>();
+    public List<string> ageList = new List<string>();
+    public List<string> viciosList = new List<string>();
+    public List<string> lenguajesList = new List<string>();
+
+
     private void Start()
     {
         Debug.Log(ipAddress);
     }
+
     public void Probar()
     {
         StartCoroutine(MakeRequest());
+    }
+    public void imprimir()
+    {
+        string textoLista = string.Join(", ", ipsList);
+        ipsInputField.text = textoLista;
     }
     IEnumerator MakeRequest()
     {
@@ -42,26 +59,35 @@ public class Request : MonoBehaviour
     {
         string respuesta = responseText;
 
-        List<string> nombres = ParsearRespuesta(respuesta);
+        HashSet<string> direccionesIP = ParsearRespuesta(respuesta);
 
-        foreach (string nombre in nombres)
+        foreach (string direccionIP in direccionesIP)
         {
-            Debug.Log(nombre);
+            Debug.Log(direccionIP);
+            ipsList.Add(direccionIP);
         }
+        imprimir();
     }
-    public static List<string> ParsearRespuesta(string respuesta)
+    public static HashSet<string> ParsearRespuesta(string respuesta)
     {
-        List<string> nombres = new List<string>();
+        HashSet<string> direccionesIP = new HashSet<string>();
 
-        // Dividir la respuesta en tres partes usando las comas y paréntesis
         string[] partes = respuesta.Split(new[] { '(', ')', '[', ']', ',', '\'' }, StringSplitOptions.RemoveEmptyEntries);
 
-        
         for (int i = 0; i < partes.Length; i += 2)
         {
-            nombres.Add(partes[i].Trim());
+            string parteActual = partes[i].Trim();
+            if (EsDireccionIPValida(parteActual))
+            {
+                direccionesIP.Add(parteActual);
+            }
         }
-
-        return nombres;
+        return direccionesIP;
     }
+    public static bool EsDireccionIPValida(string cadena)
+    {
+        System.Net.IPAddress direccionIP;
+        return System.Net.IPAddress.TryParse(cadena, out direccionIP);
+    }
+
 }
