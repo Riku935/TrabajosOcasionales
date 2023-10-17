@@ -29,14 +29,14 @@ public class Ball : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Goal1"))
         {
-            GameManager.Instance.Paddle2Scored();
-            GameManager.Instance.Restart();
+            GameManager.instance.Paddle2Scored();
+            GameManager.instance.Restart();
             Launch();
         }
         else
         {
-            GameManager.Instance.Paddle1Scored();
-            GameManager.Instance.Restart();
+            GameManager.instance.Paddle1Scored();
+            GameManager.instance.Restart();
             Launch();
         }
     }
