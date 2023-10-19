@@ -12,12 +12,12 @@ public class InfoRed : MonoBehaviour
     private void Start()
     {
         requestScript = GetComponent<Request>();
-        List<string> secondList = requestScript.ipsList;
+        //List<string> secondList = requestScript.ipsList;
     }
     public void imprimir()
     {
-        List<string> secondList = requestScript.ipsList;
-        string textoLista = string.Join(", ", secondList);
-        ipsInputField.text = textoLista;
+        //List<string> secondList = requestScript.ipsList;
+        //string textoLista = string.Join(", ", secondList);
+        //ipsInputField.text = textoLista;
     }
 }

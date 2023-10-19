@@ -5,55 +5,88 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using TMPro;
 
 public class Request : MonoBehaviour
 {
-    public string ipAddress = "172.16.48.32";
+    public string ipAddress = "http://172.16.48.37:5000/serv/ricardo/get/score";
     private string rutaArchivo = "C:\\Apache24\\htdocs\\api\\v1\\dinamico\\score";
 
     private string responseText;
-    public InputField ipsInputField;
+    [SerializeField] private TMP_Text maxScore;
 
-    public List<string> ipsList = new List<string>();
-
-    public List<string> namesList = new List<string>();
-    public List<string> ageList = new List<string>();
-    public List<string> viciosList = new List<string>();
-    public List<string> lenguajesList = new List<string>();
-
+    public float respuesta;
 
     private void Start()
     {
-        Debug.Log(ipAddress);
-    }
+        //Debug.Log(ipAddress);
+        StartCoroutine(MakeRequest());
 
+    }
+    private void Update()
+    {
+        maxScore.text = "Max Score:" + responseText;
+        updateScore();
+    }
+    void updateScore()
+    {
+        if (GameManager.instance.score1 > respuesta)
+        {
+            maxScore.text = "Max Score:" + GameManager.instance.score1;
+
+        }
+        if (GameManager.instance.score2 > respuesta)
+        {
+            maxScore.text = "Max Score:" + GameManager.instance.score2;
+
+        }
+        if (GameManager.instance.score2 > GameManager.instance.score1)
+        {
+            //maxScore.text = "Max Score:" + GameManager.instance.score2;
+
+        }
+        if (GameManager.instance.score1 > GameManager.instance.score2)
+        {
+            //maxScore.text = "Max Score:" + GameManager.instance.score1;
+
+        }
+    }
     public void Probar()
     {
-        StartCoroutine(MakeRequest());
     }
     public void imprimir()
     {
-        string textoLista = string.Join(", ", ipsList);
-        ipsInputField.text = textoLista;
+        //string textoLista = string.Join(", ", ipsList);
+        //ipsInputField.text = textoLista;
     }
     IEnumerator MakeRequest()
     {
-        using (UnityWebRequest request = UnityWebRequest.Get(ipAddress))
+        while (true)
         {
-            yield return request.SendWebRequest();
+            using (UnityWebRequest request = UnityWebRequest.Get(ipAddress))
+            {
+                yield return request.SendWebRequest();
 
-            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.LogError("Error al realizar la solicitud: " + request.error);
+                if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+                {
+                    Debug.LogError("Error al realizar la solicitud: " + request.error);
+                }
+                else
+                {
+                    responseText = request.downloadHandler.text;
+                    Debug.Log("Respuesta del servidor: " + responseText);
+                    //File.WriteAllText(rutaArchivo, responseText);
+                    //Parsear();
+                    if (float.TryParse(responseText, out respuesta))
+                    {
+                        Debug.Log(respuesta);
+                    }
+                }
+
             }
-            else
-            {
-                responseText = request.downloadHandler.text;
-                Debug.Log("Respuesta del servidor: " + responseText);
-                File.WriteAllText(rutaArchivo, responseText);
-                Parsear();
-            }
+            yield return new WaitForSecondsRealtime(2f);
         }
+        
     }
     public void Parsear()
     {
@@ -64,7 +97,7 @@ public class Request : MonoBehaviour
         foreach (string direccionIP in direccionesIP)
         {
             Debug.Log(direccionIP);
-            ipsList.Add(direccionIP);
+            //ipsList.Add(direccionIP);
         }
         imprimir();
     }

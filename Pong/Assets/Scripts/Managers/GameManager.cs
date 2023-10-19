@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_Text paddle2Score;
     [SerializeField] private TMP_Text player1;
     [SerializeField] private TMP_Text player2;
+    [SerializeField] private TMP_Text maxScore;
 
     [SerializeField] private Transform paddle1Transform;
     [SerializeField] private Transform paddle2Transform;
@@ -19,8 +20,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] public string highestName;
 
 
-    private int score1;
-    private int score2;
+    public int score1;
+    public int score2;
     private void Awake()
     {
         instance = this;
